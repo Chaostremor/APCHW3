@@ -74,3 +74,4 @@ class Newton(object):
             h = np.asscalar(h)
 
         return x - h
+        # instead of the original one: return x + h

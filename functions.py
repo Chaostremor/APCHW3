@@ -37,6 +37,7 @@ def approximateJacobian(f, x, dx=1e-6):
     # array-like, just a plain number)
     if np.isscalar(x):
         return (f(x + dx) - fx) / dx
+        # instead of the original one: f(x + dx) - fx / dx
 
     # From this point on, x must be a numpy array or numpy matrix, so
     # Df_x will be returned as a numpy matrix. Let's initialize it as
@@ -87,6 +88,7 @@ def approximateJacobian(f, x, dx=1e-6):
         h[i] = dx
         # Replace ith col of Df_x with difference quotient
         Df_x[:,i] = (f(x + h) - fx) / dx
+        # instead of the original one: Df_x[:,i] = f(x + h) - fx / dx
         # Reset h[i] to 0
         h[i] = 0
     # NOTE that there are more numpy-ish ways to iterate over the
