@@ -82,6 +82,7 @@ class TestFunctions(unittest.TestCase):
         # npt.assert_array_almost_equal(p(x), 4 + 5*x + x**2)
         #
         # But I though this would be more legible.
+        
 
 if __name__ == '__main__':
     unittest.main()
