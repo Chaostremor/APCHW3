@@ -47,16 +47,20 @@ class TestNewton(unittest.TestCase):
 #        self.assertTrue(f == g)
         solver = newton.Newton(f, tol=1.e-15, maxiter=20)
         x = solver.solve(100)
-        print(x)
+#        print(x)
         y = solver.solve(2.108)   # interesting!
-        print(y)
+#        print(y)
         z = solver.solve(-1)
-        print(z)
+#        print(z)
         self.assertAlmostEqual(x, 5.0)
         self.assertAlmostEqual(y, 3.0)
         self.assertAlmostEqual(z, 1.0)
        
-        
+    def testExp(self):
+        f = lambda x : np.exp(x) - 1
+        solver = newton.Newton(f, tol=1.e-15, maxiter=20)
+        x = solver.solve(5)
+        self.assertAlmostEqual(x, 0)
         
 
 
