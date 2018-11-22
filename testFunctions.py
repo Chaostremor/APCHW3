@@ -7,6 +7,7 @@ import numpy.testing as npt
 import functions as F
 
 class TestFunctions(unittest.TestCase):
+    # passed after fixing bugs in newton.py and functions.py 
     def test_ApproxJacobian1(self):
         slope = 3.0
         # Yes, you can define a function inside a function/method. And
@@ -25,6 +26,7 @@ class TestFunctions(unittest.TestCase):
         self.assertTrue(np.isscalar(Df_x))
         self.assertAlmostEqual(Df_x, slope)
 
+    # passed after fixing bugs in newton.py and functions.py 
     def test_ApproxJacobian2(self):
         # numpy matrices can also be initialized with strings. The
         # semicolon separates rows; spaces (or commas) delimit entries
@@ -62,6 +64,7 @@ class TestFunctions(unittest.TestCase):
         # array-specific assert statements found in numpy.testing
         npt.assert_array_almost_equal(Df_x, A)
 
+    # passed after fixing bugs in newton.py and functions.py 
     def test_Polynomial(self):
         # p(x) = x^2 + 5x + 4
         p = F.Polynomial([4, 5, 1])

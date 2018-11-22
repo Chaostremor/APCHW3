@@ -6,6 +6,7 @@ import numpy as np
 import newton
 
 class TestNewton(unittest.TestCase):
+    # passed after fixing bugs in newton.py and functions.py     
     def testLinear(self):
         # Just so you see it at least once, this is the lambda keyword
         # in Python, which allows you to create anonymous functions
