@@ -2,6 +2,7 @@
 
 import unittest
 import numpy as np
+import functions as F
 
 import newton
 
@@ -39,6 +40,24 @@ class TestNewton(unittest.TestCase):
 #        self.assertAlmostEqual(x, 2.0)
 #        self.assertAlmostEqual(y, 5.0)
         self.assertTrue((np.isclose(x, 2.0)) or (np.isclose(x, 5.0)))
+        
+    def testCubic1(self):
+        f = F.Polynomial([-15, 23, -9, 1])
+#        g = lambda x : 1*(x**2) + 1*(x**2) + 5
+#        self.assertTrue(f == g)
+        solver = newton.Newton(f, tol=1.e-15, maxiter=20)
+        x = solver.solve(100)
+        print(x)
+        y = solver.solve(2.108)   # interesting!
+        print(y)
+        z = solver.solve(-1)
+        print(z)
+        self.assertAlmostEqual(x, 5.0)
+        self.assertAlmostEqual(y, 3.0)
+        self.assertAlmostEqual(z, 1.0)
+       
+        
+        
 
 
 if __name__ == "__main__":
