@@ -1,6 +1,6 @@
 import numpy as np
 
-def approximateJacobian(f, x, dx=1e-6):
+def approximateJacobian(f, x, dx=1e-6, method="next"):
     """Calculate a numerical approximation of the Jacobian Df(x).
 
     Parameters:
@@ -36,7 +36,12 @@ def approximateJacobian(f, x, dx=1e-6):
     # First, handle the case in which x is a scalar (i.e. not
     # array-like, just a plain number)
     if np.isscalar(x):
-        return (f(x + dx) - fx) / dx
+        if method == "next":
+            return (f(x + dx) - fx) / dx
+        elif method == "former":
+            return (f(x) - f(x - dx)) / dx
+        elif method == "middle":
+            return (f(x + dx) - f(x - dx)) / (2 * dx)
         # instead of the original one: f(x + dx) - fx / dx
 
     # From this point on, x must be a numpy array or numpy matrix, so
@@ -84,13 +89,26 @@ def approximateJacobian(f, x, dx=1e-6):
     # x_N). That's the same as evaluating f at (x + h), where h = (0,
     # 0,... dx [in ith slot], 0, ..., 0).  Addition on numpy
     # arrays/matrices happens elementwise.
-    for i in range(x.size): # Could also have said range(x.size)
-        h[i] = dx
-        # Replace ith col of Df_x with difference quotient
-        Df_x[:,i] = (f(x + h) - fx) / dx
-        # instead of the original one: Df_x[:,i] = f(x + h) - fx / dx
-        # Reset h[i] to 0
-        h[i] = 0
+
+    if method == "next":
+        for i in range(x.size): # Could also have said range(x.size)
+            h[i] = dx
+            # Replace ith col of Df_x with difference quotient
+            Df_x[:,i] = (f(x + h) - fx) / dx
+            # instead of the original one: Df_x[:,i] = f(x + h) - fx / dx
+            # Reset h[i] to 0
+            h[i] = 0
+    elif method == "former":
+        for i in range(x.size):
+            h[i] = dx
+            Df_x[:,i] = (f(x) - f(x - h)) / dx
+            h[i] = 0
+    elif method == "middle":
+        for i in range(x.size):
+            h[i] = dx
+            Df_x[:,i] = (f(x + h) - f(x - h)) / (2*dx)
+            h[i] = 0
+
     # NOTE that there are more numpy-ish ways to iterate over the
     # columns of a 2D array, but I thought this C-esque way would be
     # most legible for n00bz

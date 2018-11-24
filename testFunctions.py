@@ -64,6 +64,35 @@ class TestFunctions(unittest.TestCase):
         # array-specific assert statements found in numpy.testing
         npt.assert_array_almost_equal(Df_x, A)
 
+    def test_ApproxJacobian3(self):
+        f = lambda x : x**2 - 7*x + 10
+        #g = F.Polynomial([10, -7, 1])
+        dx = 1.e-10
+        for x0 in np.linspace(-2,2,11):
+            Df_x = F.approximateJacobian(f, x0, dx)
+            self.assertTrue(np.isscalar(Df_x))
+            self.assertAlmostEqual(Df_x, (2*x0-7), places=4)
+
+    def test_JacobianMethod(self):
+        f = F.Polynomial([-15, 23, -9, 1])
+        dx = 1.e-6
+        method = "next"
+        x0 = 2.5
+        #print(x0)
+        Df_x = F.approximateJacobian(f, x0, dx, method)
+        self.assertTrue(np.isscalar(Df_x))
+        self.assertAlmostEqual(Df_x, (3*x0**2-18*x0+23), places=5)
+
+        method = "former"
+        Df_x = F.approximateJacobian(f, x0, dx, method)
+        self.assertTrue(np.isscalar(Df_x))
+        self.assertAlmostEqual(Df_x, (3*x0**2-18*x0+23), places=5)
+
+        method = "middle"
+        Df_x = F.approximateJacobian(f, x0, dx, method)
+        self.assertTrue(np.isscalar(Df_x))
+        self.assertAlmostEqual(Df_x, (3*x0**2-18*x0+23), places=7)
+
     # passed after fixing bugs in newton.py and functions.py 
     def test_Polynomial(self):
         # p(x) = x^2 + 5x + 4

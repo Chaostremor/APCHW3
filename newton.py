@@ -13,7 +13,7 @@ class Newton(object):
 
     """
     
-    def __init__(self, f, tol=1.e-6, maxiter=20, dx=1.e-6):
+    def __init__(self, f, tol=1.e-6, maxiter=20, dx=1.e-6, Df=None, max_radius=None):
         """Parameters:
         
         f: the function whose roots we seek. Can be scalar- or
@@ -30,6 +30,8 @@ class Newton(object):
         self._tol = tol
         self._maxiter = maxiter
         self._dx = dx
+        self._Df = Df
+        self._max_radius = max_radius
 
     def solve(self, x0):
         """Determine a solution of f(x) = 0, using Newton's method, starting
