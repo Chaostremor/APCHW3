@@ -1,0 +1,27 @@
+A simple multi-dimensional root finder employing Newton's method and relevant tests
+
+CONTENT:
+    newton.py           Implementation of a Newton-Raphson root-finder.
+    functions.py        a function for numerical Jacobians and a class for Callable polynomial object
+    testNewton.py       several tests for Newton's method
+    testFunctions.py    several tests for Jacobians function
+    README
+
+USAGE example:
+    f = lambda x : EXPRESSION OF F(X)
+    solver = newton.Newton(f, tol=TOL, maxiter=MAXITER, dx=DX, Df=None/DF, max_radius=None/MAX_RADIUS)
+    x = solver.solve(x0)
+
+FEATURES:
+    1. Raise an exception when root x is out of maximum radius bound to x0 with iteration, with 'max_radius'
+    2. Support analytic Jacobians, with 'Df'
+    3. Three options of difference quotient for numerical Jacobians
+    4. Raise a warning when one step within iteration is too big, remind users to check x0 or f(x) for recalculation
+    5. Accuracy for different functions of different dimensions
+    6. Raise an exception when reaching maxiter with no correct roots
+    7. Relevant tests, in testFunctions.py and testNewton.py
+
+
+AUTHOR: Chao Song
+MODIFIED DATE: 2018/11/25
+
