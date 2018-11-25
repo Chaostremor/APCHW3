@@ -60,8 +60,12 @@ class Newton(object):
         """
         if fx is None:
             fx = self._f(x)
+            
+        if self._Df is None:
+            Df_x = F.approximateJacobian(self._f, x, self._dx)
+        else:
+            Df_x = self._Df(x)
 
-        Df_x = F.approximateJacobian(self._f, x, self._dx)
         # linalg.solve(A,B) returns the matrix solution to AX = B, so
         # it gives (A^{-1}) B. np.matrix() promotes scalars to 1x1
         # matrices.

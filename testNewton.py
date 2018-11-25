@@ -77,7 +77,14 @@ class TestNewton(unittest.TestCase):
             self.assertTrue(np.asscalar(x[i]))
             self.assertTrue(np.asscalar(xreal[i]))
         npt.assert_array_almost_equal(x, xreal)
-            
+
+    def testUserJacobian1(self):
+        f = lambda x: x**2 - 9
+        df = lambda x: 2*x
+        solver = newton.Newton(f, Df=df)
+        x = solver.solve(2.0)
+        self.assertAlmostEqual(x, 3)
+
 
 if __name__ == "__main__":
     unittest.main()
