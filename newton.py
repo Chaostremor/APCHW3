@@ -6,6 +6,7 @@ Implementation of a Newton-Raphson root-finder.
 
 import numpy as np
 import functions as F
+import warnings
 
 class Newton(object):
     """Newton objects have a solve() method for finding roots of f(x)
@@ -91,6 +92,10 @@ class Newton(object):
         # x. The function np.asscalar() will act on a numpy array or
         # matrix that has only a single data element inside and return
         # that element as a scalar.
+        thres = 1.e6
+        if np.linalg.norm(h) > thres:
+            warnings.warn("One step within iteration is too big, check x0 or f(x) for recalculation is recommended !")
+        
         if np.isscalar(x):
             h = np.asscalar(h)
 
