@@ -44,14 +44,29 @@ class Newton(object):
         # the functions/methods invoked inside solve() return "the
         # right thing" when x0 is scalar.
         x = x0
+        #if (self._f.shape != x.shape):
+        #    raise Exception("Input x0 and function have different dimension !")
+        
         for i in range(self._maxiter):
             fx = self._f(x)
+
+            # deal with root x is out of maximum radius bound to x0 with iteration
+            if  (not self._max_radius is None) and (np.linalg.norm(x-x0) > self._max_radius):
+                raise Exception("Root x is out of maximum radius bound to x0 with iteration !")
+
             # linalg.norm works fine on scalar inputs
             if np.linalg.norm(fx) < self._tol:
                 return x
             x = self.step(x, fx)
-
         return x
+
+        # deal with reaching maxiter with no correct root
+        niter = i + 1
+        fx = self._f(x)
+        if (niter == self._maxiter) and (np.linalg.norm(fx) >= self._tol):
+            raise Exception("Reaching maxiter with no correct root !")
+        
+        
 
     def step(self, x, fx=None):
         """Take a single step of a Newton method, starting from x. If the
@@ -60,7 +75,7 @@ class Newton(object):
         """
         if fx is None:
             fx = self._f(x)
-            
+
         if self._Df is None:
             Df_x = F.approximateJacobian(self._f, x, self._dx)
         else:

@@ -102,7 +102,14 @@ class TestNewton(unittest.TestCase):
             self.assertTrue(np.asscalar(xreal[i]))
         npt.assert_array_almost_equal(x, xreal)
 
-    
+# specifially for testing some potential pathologies of newton's method
+class TestPathologies(unittest.TestCase):
+    def testOutofBound(self):
+        # use the function in the background
+        f = lambda x: x * np.exp(-x)
+        solver = newton.Newton(f, tol=1.e-15, max_radius=20)
+        self.assertRaises(Exception, solver, 0.9)
+        #self.assertRaises(Exception, solver, 1.1) 
 
 if __name__ == "__main__":
     unittest.main()
