@@ -31,8 +31,9 @@ class TestNewton(unittest.TestCase):
         # Equality should be exact if we supply *the* root, ergo
         # assertEqual rather than assertAlmostEqual
         self.assertEqual(x, -2.0)
-        
-    def testQuard1(self):
+    
+    # test for quadratical polynomial function     
+    def testQuad1(self):
         f = lambda x : x**2 - 7*x + 10
         solver = newton.Newton(f, tol=1.e-15, maxiter=10)
         x = solver.solve(100)
@@ -41,8 +42,10 @@ class TestNewton(unittest.TestCase):
 #        print(y)
 #        self.assertAlmostEqual(x, 2.0)
 #        self.assertAlmostEqual(y, 5.0)
+        # could have two roots, depending on x0 
         self.assertTrue((np.isclose(x, 2.0)) or (np.isclose(x, 5.0)))
-        
+
+    # test for cubic polynomial function         
     def testCubic1(self):
         f = F.Polynomial([-15, 23, -9, 1])
 #        g = lambda x : 1*(x**2) + 1*(x**2) + 5
@@ -57,13 +60,15 @@ class TestNewton(unittest.TestCase):
         self.assertAlmostEqual(x, 5.0)
         self.assertAlmostEqual(y, 3.0)
         self.assertAlmostEqual(z, 1.0)
-       
+    
+    # test for exponential function        
     def testExp(self):
         f = lambda x : np.exp(x) - 1
         solver = newton.Newton(f, tol=1.e-15, maxiter=20)
         x = solver.solve(5)
         self.assertAlmostEqual(x, 0)
-        
+
+    # test for 2D polynomial function    
     def test2Dfunc(self):
         A = np.matrix("1.0 2.0; 3.0 4.0")
         B = np.matrix("2.0; 3.0")
@@ -73,12 +78,14 @@ class TestNewton(unittest.TestCase):
         solver = newton.Newton(f, tol=1.e-15, maxiter=20)
         x = solver.solve(x0)
         self.assertEqual(x.shape, (2,1))
+        # real roots
         xreal = np.matrix("-1.0; 1.5")
         for i in range(x.size):
             self.assertTrue(np.asscalar(x[i]))
             self.assertTrue(np.asscalar(xreal[i]))
         npt.assert_array_almost_equal(x, xreal)
 
+    # test for user-specified Jacobians, 1D polynomial
     def testUserJacobian1(self):
         f = lambda x: x ** 2 - 9
         df = lambda x: 2 * x
@@ -86,6 +93,7 @@ class TestNewton(unittest.TestCase):
         x = solver.solve(2.0)
         self.assertAlmostEqual(x, 3)
 
+    # test for user-specified Jacobians, 2D polynomial
     def testUserJacobian2(self):
         A = np.matrix("1.0 2.0; 3.0 4.0")
         B = np.matrix("2.0; 3.0")
@@ -123,9 +131,9 @@ class TestPathologies(unittest.TestCase):
         f = F.Polynomial([-15, 23, -9, 1])
         solver = newton.Newton(f, tol=1.e-15, maxiter=10, max_radius=10)
         self.assertRaises(Exception, solver, 100)
-
+   
+    # test for non-differentiable function
     def testNotActualRoot2(self):
-        # non-differentiable
         def f(x):
             if x > 0:
                 return x
@@ -141,13 +149,13 @@ class TestPathologies(unittest.TestCase):
     def testNewtonStep(self):
         f = lambda x: (x - 3) ** 2 - 1
         solver = newton.Newton(f)
+        # method from https://docs.python.org/3/library/warnings.html
         with warnings.catch_warnings(record=True) as w:
             # cause all warnings to always be triggered
             warnings.simplefilter("always")
             # trigger a warning
             solver.step(3)
             assert "One step within iteration is too big, check x0 or f(x) for recalculation is recommended !" in str(w[-1].message)
-
 
     
 

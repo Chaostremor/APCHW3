@@ -6,7 +6,7 @@ Implementation of a Newton-Raphson root-finder.
 
 import numpy as np
 import functions as F
-import warnings
+import warnings   # import class of warnings
 
 class Newton(object):
     """Newton objects have a solve() method for finding roots of f(x)
@@ -25,6 +25,11 @@ class Newton(object):
         perform maxiter iterations, whichever happens first
 
         dx: step size for computing approximate Jacobian
+
+        Df: the analytic Jacobians if specified by the user 
+
+        max_radius: a radius r around the initial guess x0 with
+        which the computed root must lie if specified by the user
 
         """
         self._f = f
@@ -45,13 +50,11 @@ class Newton(object):
         # the functions/methods invoked inside solve() return "the
         # right thing" when x0 is scalar.
         x = x0
-        #if (self._f.shape != x.shape):
-        #    raise Exception("Input x0 and function have different dimension !")
         
         for i in range(self._maxiter):
             fx = self._f(x)
 
-            # deal with root x is out of maximum radius bound to x0 with iteration
+            # raise exception when root x is out of maximum radius bound to x0 with iteration
             if  (not self._max_radius is None) and (np.linalg.norm(x-x0) > self._max_radius):
                 raise Exception("Root x is out of maximum radius bound to x0 with iteration !")
 
@@ -61,7 +64,7 @@ class Newton(object):
             x = self.step(x, fx)
         return x
 
-        # deal with reaching maxiter with no correct root
+        # raise exception when reaching maxiter with no correct root
         niter = i + 1
         fx = self._f(x)
         if (niter == self._maxiter) and (np.linalg.norm(fx) >= self._tol):
@@ -92,6 +95,8 @@ class Newton(object):
         # x. The function np.asscalar() will act on a numpy array or
         # matrix that has only a single data element inside and return
         # that element as a scalar.
+
+        # raise warnings when h is too big, might be abnormal
         thres = 1.e6
         if np.linalg.norm(h) > thres:
             warnings.warn("One step within iteration is too big, check x0 or f(x) for recalculation is recommended !")

@@ -64,6 +64,7 @@ class TestFunctions(unittest.TestCase):
         # array-specific assert statements found in numpy.testing
         npt.assert_array_almost_equal(Df_x, A)
 
+    # test for Jacobian, 1D polynomial, quadratical
     def test_ApproxJacobian3(self):
         f = lambda x : x**2 - 7*x + 10
         #g = F.Polynomial([10, -7, 1])
@@ -73,6 +74,7 @@ class TestFunctions(unittest.TestCase):
             self.assertTrue(np.isscalar(Df_x))
             self.assertAlmostEqual(Df_x, (2*x0-7), places=4)
 
+    # test for options of difference quotient of Jacobian
     def test_JacobianMethod(self):
         f = F.Polynomial([-15, 23, -9, 1])
         dx = 1.e-6

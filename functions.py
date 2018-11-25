@@ -17,6 +17,11 @@ def approximateJacobian(f, x, dx=1e-6, method="next"):
     (iii) a 2D numpy array of shape (N,1), or (iv) a numpy matrix of
     shape (N,1)
 
+    method: different options to obtain the numerical Jacobians, including:
+       "next"   :   (f(x + dx) - fx) / dx
+       "former" :   (f(x) - f(x - dx)) / dx
+       "middle" :   (f(x + dx) - f(x - dx)) / (2 * dx)
+
     Returns:
     
     Df_x: a numerical approximation to the Jacobian of f at x.  If x
@@ -36,6 +41,7 @@ def approximateJacobian(f, x, dx=1e-6, method="next"):
     # First, handle the case in which x is a scalar (i.e. not
     # array-like, just a plain number)
     if np.isscalar(x):
+        # indicate equation for difference quotient
         if method == "next":
             return (f(x + dx) - fx) / dx
         elif method == "former":
@@ -90,6 +96,7 @@ def approximateJacobian(f, x, dx=1e-6, method="next"):
     # 0,... dx [in ith slot], 0, ..., 0).  Addition on numpy
     # arrays/matrices happens elementwise.
 
+    # implentation
     if method == "next":
         for i in range(x.size): # Could also have said range(x.size)
             h[i] = dx
