@@ -68,7 +68,7 @@ class TestNewton(unittest.TestCase):
         B = np.matrix("2.0; 3.0")
         def f(x):
             return A * x - B
-        x0 = np.matrix("5.0; 6.0")
+        x0 = np.matrix("3.0; 5.0")
         solver = newton.Newton(f, tol=1.e-15, maxiter=20)
         x = solver.solve(x0)
         self.assertEqual(x.shape, (2,1))
@@ -85,6 +85,24 @@ class TestNewton(unittest.TestCase):
         x = solver.solve(2.0)
         self.assertAlmostEqual(x, 3)
 
+    def testUserJacobian2(self):
+        A = np.matrix("1.0 2.0; 3.0 4.0")
+        B = np.matrix("2.0; 3.0")
+        def f(x):
+            return A * x -B
+        def df(x):
+            return A
+        x0 = np.matrix("3.0; 5.0")
+        solver = newton.Newton(f, tol=1.e-15, Df=df)
+        x = solver.solve(x0)
+        self.assertEqual(x.shape, (2,1))
+        xreal = np.matrix("-1.0; 1.5")
+        for i in range(x.size):
+            self.assertTrue(np.asscalar(x[i]))
+            self.assertTrue(np.asscalar(xreal[i]))
+        npt.assert_array_almost_equal(x, xreal)
+
+    
 
 if __name__ == "__main__":
     unittest.main()
